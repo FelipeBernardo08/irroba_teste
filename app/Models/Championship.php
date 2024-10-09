@@ -58,6 +58,11 @@ class Championship extends Model
         return self::with('quarters')->get()->toArray();
     }
 
+    public function points()
+    {
+        return $this->hasMany(Points::class, 'fk_championship');
+    }
+
     public function readChampionshipId(int $id): array
     {
         return self::where('id', $id)
@@ -77,13 +82,12 @@ class Championship extends Model
             ->with('finals.team2')
             ->with('thirdPlace')
             ->with('thirdPlace.team')
-            ->with('thirdPlace.team.points')
             ->with('secondPlace')
             ->with('secondPlace.team')
-            ->with('secondPlace.team.points')
             ->with('champion')
             ->with('champion.team')
-            ->with('champion.team.points')
+            ->with('points')
+            ->with('points.team')
             ->get()
             ->toArray();
     }
