@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChampionController;
 use App\Http\Controllers\ChampionshipController;
+use App\Http\Controllers\SubscribeChampionshipController;
 use App\Http\Controllers\TeamsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,3 +29,6 @@ Route::get('read-team/{id}', [TeamsController::class, 'readTeamId']);
 Route::post('create-championship', [ChampionshipController::class, 'createChampionship']);
 Route::get('read-championships', [ChampionshipController::class, 'readChampionships']);
 Route::get('read-championship/{id}', [ChampionshipController::class, 'readChampionshipId']);
+
+//subscribeChampionship
+Route::post('create-subscribe-relationship', [SubscribeChampionshipController::class, 'createSubscribe']);

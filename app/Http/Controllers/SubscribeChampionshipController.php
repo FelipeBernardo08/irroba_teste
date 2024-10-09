@@ -3,83 +3,38 @@
 namespace App\Http\Controllers;
 
 use App\Models\SubscribeChampionship;
+use Exception;
 use Illuminate\Http\Request;
 
 class SubscribeChampionshipController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    private $subscribe;
+
+    public function __construct(SubscribeChampionship $subscribeChampionship)
     {
-        //
+        $this->subscribe = $subscribeChampionship;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function createSubscribe(Request $request): object
     {
-        //
+        try {
+            $responseSubscribe = $this->subscribe->createSubscribe($request);
+            if (count($responseSubscribe) != 0) {
+                return $this->responseOK($responseSubscribe);
+            }
+            return $this->error('Inscrição do time não pode ser concluída, tente novamnte mais tarde!');
+        } catch (Exception $e) {
+            return $this->error($e);
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function responseOK(array $response): object
     {
-        //
+        return response()->json($response, 200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\SubscribeChampionship  $subscribeChampionship
-     * @return \Illuminate\Http\Response
-     */
-    public function show(SubscribeChampionship $subscribeChampionship)
+    public function error(string $message): object
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\SubscribeChampionship  $subscribeChampionship
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(SubscribeChampionship $subscribeChampionship)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\SubscribeChampionship  $subscribeChampionship
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, SubscribeChampionship $subscribeChampionship)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\SubscribeChampionship  $subscribeChampionship
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(SubscribeChampionship $subscribeChampionship)
-    {
-        //
+        return response()->json(['error' => $message], 404);
     }
 }

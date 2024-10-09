@@ -13,4 +13,12 @@ class SubscribeChampionship extends Model
         'fk_team',
         'fk_championship'
     ];
+
+    public function createSubscribe(object $request): array
+    {
+        return self::create([
+            'fk_team' => $request->fk_team,
+            'fk_championship' => $request->fk_championship
+        ])->toArray();
+    }
 }
