@@ -3,83 +3,65 @@
 namespace App\Http\Controllers;
 
 use App\Models\Championship;
+use Exception;
 use Illuminate\Http\Request;
 
 class ChampionshipController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    private $championShip;
+
+    public function __construct(Championship $champions)
     {
-        //
+        $this->championShip = $champions;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+    public function createChampionship(Request $request): object
     {
-        //
+        try {
+            $responseTeam = $this->championShip->createChampionship($request);
+            if (count($responseTeam) != 0) {
+                return $this->responseOK($responseTeam);
+            }
+            return $this->error('Time não pode ser cadastrado, tente novamente mais tarde!');
+        } catch (Exception $e) {
+            return $this->error($e);
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function readChampionships(): object
     {
-        //
+        try {
+            $responseTeam = $this->championShip->readChampionships();
+            if (count($responseTeam) != 0) {
+                return $this->responseOK($responseTeam);
+            }
+            return $this->error('Times não encontrados, tente novamente mais tarde!');
+        } catch (Exception $e) {
+            return $this->error($e);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Championship  $championship
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Championship $championship)
+    public function readChampionshipId(int $id): object
     {
-        //
+        try {
+            $responseTeam = $this->championShip->readChampionshipId($id);
+            if (count($responseTeam) != 0) {
+                return $this->responseOK($responseTeam);
+            }
+            return $this->error('Time não encontrado, tente novamente mais tarde!');
+        } catch (Exception $e) {
+            return $this->error($e);
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Championship  $championship
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Championship $championship)
+    public function responseOK(array $response): object
     {
-        //
+        return response()->json($response, 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Championship  $championship
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Championship $championship)
+    public function error(string $message): object
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Championship  $championship
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Championship $championship)
-    {
-        //
+        return response()->json(['error' => $message], 404);
     }
 }
