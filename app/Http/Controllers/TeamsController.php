@@ -3,83 +3,64 @@
 namespace App\Http\Controllers;
 
 use App\Models\Teams;
+use Exception;
 use Illuminate\Http\Request;
 
 class TeamsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    private $teams;
+
+    public function __construct(Teams $team)
     {
-        //
+        $this->teams = $team;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function createTeam(Request $request): object
     {
-        //
+        try {
+            $responseTeam = $this->teams->createTeam($request);
+            if (count($responseTeam) != 0) {
+                return $this->responseOK($responseTeam);
+            }
+            return $this->error('Time não pode ser cadastrado, tente novamente mais tarde!');
+        } catch (Exception $e) {
+            return $this->error($e);
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function readTeams(): object
     {
-        //
+        try {
+            $responseTeam = $this->teams->readTeams();
+            if (count($responseTeam) != 0) {
+                return $this->responseOK($responseTeam);
+            }
+            return $this->error('Times não encontrados, tente novamente mais tarde!');
+        } catch (Exception $e) {
+            return $this->error($e);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Teams  $teams
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Teams $teams)
+    public function readTeamId(int $id): object
     {
-        //
+        try {
+            $responseTeam = $this->teams->readTeamId($id);
+            if (count($responseTeam) != 0) {
+                return $this->responseOK($responseTeam);
+            }
+            return $this->error('Time não encontrado, tente novamente mais tarde!');
+        } catch (Exception $e) {
+            return $this->error($e);
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Teams  $teams
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Teams $teams)
+    public function responseOK(array $response): object
     {
-        //
+        return response()->json($response, 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Teams  $teams
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Teams $teams)
+    public function error(string $message): object
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Teams  $teams
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Teams $teams)
-    {
-        //
+        return response()->json(['error' => $message], 404);
     }
 }

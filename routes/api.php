@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TeamsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
+//team
+Route::post('create-team', [TeamsController::class, 'createTeam']);
+Route::get('read-teams', [TeamsController::class, 'readTeams']);
+Route::get('read-team/{id}', [TeamsController::class, 'readTeamId']);
