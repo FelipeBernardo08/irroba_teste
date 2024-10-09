@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Championship;
 use App\Models\Teams;
+use App\Models\SubscribeChampionship;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -11,13 +12,16 @@ class ChampionshipController extends Controller
 {
     private $championShip;
     private $teams;
+    private $subscribe;
 
     public function __construct(
         Championship $champions,
-        Teams $team
+        Teams $team,
+        SubscribeChampionship $sub
     ) {
         $this->championShip = $champions;
         $this->teams = $team;
+        $this->subscribe = $sub;
     }
 
 
@@ -59,6 +63,18 @@ class ChampionshipController extends Controller
                 return $this->responseOK($responseChampionship);
             }
             return $this->error('Campeonato não encontrado, tente novamente mais tarde!');
+        } catch (Exception $e) {
+            return $this->error($e);
+        }
+    }
+
+    public function initializeChampionship(int $id): object
+    {
+        try {
+            $responseSubscribe = $this->subscribe->readTeamsSubscribedByChampionshipId($id);
+            if (count($responseSubscribe) >= 8) {
+            }
+            return $this->error('Necessário 8 times inscritos para iniciar o campeonato');
         } catch (Exception $e) {
             return $this->error($e);
         }

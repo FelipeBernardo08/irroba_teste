@@ -32,3 +32,6 @@ Route::get('read-championship/{id}', [ChampionshipController::class, 'readChampi
 
 //subscribeChampionship
 Route::post('create-subscribe-relationship', [SubscribeChampionshipController::class, 'createSubscribe']);
+
+//initializeChampionship
+Route::get('initialize-championship/{id}', [ChampionshipController::class, 'initializeChampionship']);
