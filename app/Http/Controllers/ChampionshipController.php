@@ -10,6 +10,7 @@ use App\Models\Points;
 use App\Models\Finals;
 use App\Models\SemiFinals;
 use App\Models\SecondPlace;
+use App\Models\ThirdPlace;
 use App\Models\Champion;
 use App\Models\PlayThirdPlace;
 use Exception;
@@ -25,6 +26,7 @@ class ChampionshipController extends Controller
     private $finals;
     private $semiFinals;
     private $secondPlace;
+    private $thirdPlace;
     private $champion;
     private $playThirdPlace;
 
@@ -38,7 +40,8 @@ class ChampionshipController extends Controller
         SemiFinals $semi,
         SecondPlace $second,
         Champion $champ,
-        PlayThirdPlace $playThird
+        PlayThirdPlace $playThird,
+        ThirdPlace $third
     ) {
         $this->championShip = $champions;
         $this->teams = $team;
@@ -50,6 +53,7 @@ class ChampionshipController extends Controller
         $this->secondPlace = $second;
         $this->champion = $champ;
         $this->playThirdPlace = $playThird;
+        $this->thirdPlace = $third;
     }
 
 
@@ -113,13 +117,13 @@ class ChampionshipController extends Controller
                             $this->insertPointsPlay($responseSemiFinals);
                             $this->removePointsPlay($responseSemiFinals);
                             $winnersSemiFinals = $this->getWinners($responseSemiFinals);
+                            $idLosers = $this->getLosers($responseSemiFinals);
+                            $this->setPlayThirdPlace($idLosers, $id);
                             $responseFinals = $this->finals->createFinals($winnersSemiFinals, $id);
                             if (count($responseFinals) != 0) {
                                 $this->insertPointsPlay($responseFinals);
                                 $this->removePointsPlay($responseFinals);
-                                $idLosers = $this->getLosers($responseFinals);
-                                dump($idLosers);
-                                // $this->setPlayThirdPlace($idLosers[0], $id);
+
                                 $idWinner = $this->getWinners($responseFinals);
                                 $this->setSecondPlace($idWinner[0], $id, $responseFinals);
                                 $this->setWinner($idWinner[0], $id);
@@ -289,7 +293,7 @@ class ChampionshipController extends Controller
 
     public function setThirdPlace(int $idWinner, int $idChampionship): void
     {
-        $this->createThirdPlace($idWinner, $idChampionship);
+        $this->thirdPlace->createThirdPlace($idWinner, $idChampionship);
     }
 
     public function responseOK(array $response): object

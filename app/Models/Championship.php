@@ -23,6 +23,11 @@ class Championship extends Model
         return $this->hasMany(SemiFinals::class, 'fk_championship');
     }
 
+    public function thirdPlacePlay()
+    {
+        return $this->hasMany(PlayThirdPlace::class, 'fk_championship');
+    }
+
     public function finals()
     {
         return $this->hasMany(Finals::class, 'fk_championship');
@@ -56,23 +61,26 @@ class Championship extends Model
     public function readChampionshipId(int $id): array
     {
         return self::where('id', $id)
+            ->with('subscribed')
+            ->with('subscribed.team')
             ->with('quarters')
             ->with('quarters.team1')
             ->with('quarters.team2')
             ->with('semiFinals')
             ->with('semiFinals.team1')
             ->with('semiFinals.team2')
+            ->with('thirdPlacePlay')
+            ->with('thirdPlacePlay.team1')
+            ->with('thirdPlacePlay.team2')
             ->with('finals')
             ->with('finals.team1')
             ->with('finals.team2')
-            ->with('subscribed')
-            ->with('subscribed.team')
-            ->with('secondPlace')
-            ->with('secondPlace.team')
-            ->with('secondPlace.team.points')
             ->with('thirdPlace')
             ->with('thirdPlace.team')
             ->with('thirdPlace.team.points')
+            ->with('secondPlace')
+            ->with('secondPlace.team')
+            ->with('secondPlace.team.points')
             ->with('champion')
             ->with('champion.team')
             ->with('champion.team.points')
