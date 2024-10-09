@@ -13,14 +13,20 @@ class Championship extends Model
         'name'
     ];
 
+    public function quarters()
+    {
+        return $this->hasMany(QuarterFinals::class, 'fk_championship');
+    }
+
     public function readChampionships(): array
     {
-        return self::get()->toArray();
+        return self::with('quarters')->get()->toArray();
     }
 
     public function readChampionshipId(int $id): array
     {
         return self::where('id', $id)
+            ->with('quarters')
             ->get()
             ->toArray();
     }

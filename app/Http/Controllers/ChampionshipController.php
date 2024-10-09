@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Championship;
 use App\Models\Teams;
 use App\Models\SubscribeChampionship;
+use App\Models\QuarterFinals;
+use App\Models\Points;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -13,15 +15,21 @@ class ChampionshipController extends Controller
     private $championShip;
     private $teams;
     private $subscribe;
+    private $quarterFinals;
+    private $points;
 
     public function __construct(
         Championship $champions,
         Teams $team,
-        SubscribeChampionship $sub
+        SubscribeChampionship $sub,
+        QuarterFinals $quarter,
+        Points $point
     ) {
         $this->championShip = $champions;
         $this->teams = $team;
         $this->subscribe = $sub;
+        $this->quarterFinals = $quarter;
+        $this->points = $point;
     }
 
 
@@ -71,12 +79,47 @@ class ChampionshipController extends Controller
     public function initializeChampionship(int $id): object
     {
         try {
-            $responseSubscribe = $this->subscribe->readTeamsSubscribedByChampionshipId($id);
-            if (count($responseSubscribe) >= 8) {
+            $responseQuarter = $this->quarterFinals->readQuarterByIdChampionship($id);
+            if (count($responseQuarter) == 0) {
+                $responseSubscribe = $this->subscribe->readTeamsSubscribedByChampionshipId($id);
+                if (count($responseSubscribe) >= 8) {
+                    $responseQuarter = $this->quarterFinals->createPlayQuarter($responseSubscribe);
+                    if (count($responseQuarter) != 0) {
+                        $this->insertPointsPlay($responseQuarter);
+                        $this->removePointsPlay($responseQuarter);
+                        return $this->responseOK($responseQuarter);
+                    }
+                    return $this->error('Erro ao criar partidas das quartas de finais');
+                }
+                return $this->error('Necessário 8 times inscritos para iniciar o campeonato');
             }
-            return $this->error('Necessário 8 times inscritos para iniciar o campeonato');
+            return $this->error('Campeonato já foi iniciado!');
         } catch (Exception $e) {
             return $this->error($e);
+        }
+    }
+
+    public function insertPointsPlay(array $plays): void
+    {
+        foreach ($plays as $key => $play) {
+            if ($play['goals_team_1'] > 0) {
+                $this->points->incrementPoint($play['fk_team_1'], $play['fk_championship'], $play['goals_team_1']);
+            }
+            if ($play['goals_team_2'] > 0) {
+                $this->points->incrementPoint($play['fk_team_2'], $play['fk_championship'], $play['goals_team_2']);
+            }
+        }
+    }
+
+    public function removePointsPlay(array $plays): void
+    {
+        foreach ($plays as $key => $play) {
+            if ($play['goals_team_2'] > 0) {
+                $this->points->decrementPoint($play['fk_team_1'], $play['fk_championship'], $play['goals_team_2']);
+            }
+            if ($play['goals_team_1'] > 0) {
+                $this->points->decrementPoint($play['fk_team_2'], $play['fk_championship'], $play['goals_team_1']);
+            }
         }
     }
 
