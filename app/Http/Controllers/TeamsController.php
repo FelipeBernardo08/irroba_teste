@@ -15,14 +15,15 @@ class TeamsController extends Controller
         $this->teams = $team;
     }
 
-    public function createTeam(Request $request): object
+
+    public function createTeams(Request $request): object
     {
         try {
-            $responseTeam = $this->teams->createTeam($request);
-            if (count($responseTeam) != 0) {
-                return $this->responseOK($responseTeam);
+            $responseTeams = $this->teams->createTeams($request['teams']);
+            if (count($responseTeams) != 0) {
+                return $this->responseOK($responseTeams);
             }
-            return $this->error('Time não pode ser cadastrado, tente novamente mais tarde!');
+            return $this->error('Times não puderam ser cadastrados, tente novamente mais tarde!');
         } catch (Exception $e) {
             return $this->error($e);
         }

@@ -23,12 +23,15 @@ class SubscribeChampionshipController extends Controller
     public function createSubscribe(Request $request): object
     {
         try {
-            $responseSubscribe = $this->subscribe->createSubscribe($request);
-            if (count($responseSubscribe) != 0) {
-                $this->points->createPoints($responseSubscribe);
-                return $this->responseOK($responseSubscribe);
+            foreach ($request['teams'] as $key => $team) {
+                $responseSubscribe = $this->subscribe->createSubscribe($team, $request->fk_championship);
+                if (count($responseSubscribe) != 0) {
+                    $this->points->createPoints($team, $request->fk_championship);
+                }
+                if (($key + 1) == count($request['teams'])) {
+                    return response()->json(['msg' => 'Times inscritos com sucesso'], 200);
+                }
             }
-            return $this->error('Inscrição do time não pode ser concluída, tente novamnte mais tarde!');
         } catch (Exception $e) {
             return $this->error($e);
         }

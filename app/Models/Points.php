@@ -20,11 +20,11 @@ class Points extends Model
         return $this->belongsTo(Teams::class, 'fk_team');
     }
 
-    public function createPoints(array $points): array
+    public function createPoints(int $idTeam, int $idChampionship): array
     {
         return self::create([
-            'fk_team' => $points['fk_team'],
-            'fk_championship' => $points['fk_championship'],
+            'fk_team' => $idTeam,
+            'fk_championship' => $idChampionship,
         ])->toArray();
     }
 

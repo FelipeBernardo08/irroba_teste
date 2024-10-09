@@ -30,10 +30,17 @@ class Teams extends Model
             ->toArray();
     }
 
-    public function createTeam(object $team): array
+    public function createTeams(array $teams): array
     {
-        return self::create([
-            'name' => $team->name
-        ])->toArray();
+        foreach ($teams as $key => $team) {
+            self::create([
+                'name' => $team
+            ])->toArray();
+
+            if (($key + 1) == count($teams)) {
+                return self::get()
+                    ->toArray();
+            }
+        }
     }
 }

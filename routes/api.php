@@ -4,6 +4,7 @@ use App\Http\Controllers\ChampionController;
 use App\Http\Controllers\ChampionshipController;
 use App\Http\Controllers\SubscribeChampionshipController;
 use App\Http\Controllers\TeamsController;
+use App\Models\Teams;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,10 +21,9 @@ use Illuminate\Support\Facades\Route;
 
 
 //team
-Route::post('create-team', [TeamsController::class, 'createTeam']);
+Route::post('create-teams', [TeamsController::class, 'createTeams']);
 Route::get('read-teams', [TeamsController::class, 'readTeams']);
 Route::get('read-team/{id}', [TeamsController::class, 'readTeamId']);
-
 
 //championship
 Route::post('create-championship', [ChampionshipController::class, 'createChampionship']);

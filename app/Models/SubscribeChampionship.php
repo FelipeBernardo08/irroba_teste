@@ -19,11 +19,11 @@ class SubscribeChampionship extends Model
         return $this->belongsTo(Teams::class, 'fk_team');
     }
 
-    public function createSubscribe(object $request): array
+    public function createSubscribe(int $idTeam, int $idChampionship): array
     {
         return self::create([
-            'fk_team' => $request->fk_team,
-            'fk_championship' => $request->fk_championship
+            'fk_team' => $idTeam,
+            'fk_championship' => $idChampionship
         ])->toArray();
     }
 
