@@ -15,6 +15,10 @@ class CreateChampionsTable extends Migration
     {
         Schema::create('champions', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('fk_team');
+            $table->unsignedBigInteger('fk_championship');
+            $table->foreign('fk_team')->references('id')->on('teams');
+            $table->foreign('fk_championship')->references('id')->on('championships');
             $table->timestamps();
         });
     }

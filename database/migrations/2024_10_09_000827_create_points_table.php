@@ -15,6 +15,11 @@ class CreatePointsTable extends Migration
     {
         Schema::create('points', function (Blueprint $table) {
             $table->id();
+            $table->integer('points');
+            $table->unsignedBigInteger('fk_team');
+            $table->unsignedBigInteger('fk_championship');
+            $table->foreign('fk_team')->references('id')->on('teams');
+            $table->foreign('fk_championship')->references('id')->on('championships');
             $table->timestamps();
         });
     }

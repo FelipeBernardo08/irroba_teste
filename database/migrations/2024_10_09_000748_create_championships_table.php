@@ -15,6 +15,7 @@ class CreateChampionshipsTable extends Migration
     {
         Schema::create('championships', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->timestamps();
         });
     }

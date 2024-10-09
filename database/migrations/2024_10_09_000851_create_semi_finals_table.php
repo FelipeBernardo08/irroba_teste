@@ -15,6 +15,14 @@ class CreateSemiFinalsTable extends Migration
     {
         Schema::create('semi_finals', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('fk_team_1');
+            $table->unsignedBigInteger('fk_team_2');
+            $table->unsignedBigInteger('fk_championship');
+            $table->integer('goals_team_1');
+            $table->integer('goals_team_2');
+            $table->foreign('fk_team_1')->references('id')->on('teams');
+            $table->foreign('fk_team_2')->references('id')->on('teams');
+            $table->foreign('fk_championship')->references('id')->on('championships');
             $table->timestamps();
         });
     }

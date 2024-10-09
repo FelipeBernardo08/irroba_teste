@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class SubscribeChampionship extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'fk_team',
+        'fk_championship'
+    ];
 }
