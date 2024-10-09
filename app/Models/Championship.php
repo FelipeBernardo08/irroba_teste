@@ -18,6 +18,36 @@ class Championship extends Model
         return $this->hasMany(QuarterFinals::class, 'fk_championship');
     }
 
+    public function semiFinals()
+    {
+        return $this->hasMany(SemiFinals::class, 'fk_championship');
+    }
+
+    public function finals()
+    {
+        return $this->hasMany(Finals::class, 'fk_championship');
+    }
+
+    public function subscribed()
+    {
+        return $this->hasMany(SubscribeChampionship::class, 'fk_championship');
+    }
+
+    public function secondPlace()
+    {
+        return $this->hasMany(SecondPlace::class, 'fk_championship');
+    }
+
+    public function thirdPlace()
+    {
+        return $this->hasMany(ThirdPlace::class, 'fk_championship');
+    }
+
+    public function champion()
+    {
+        return $this->hasMany(Champion::class, 'fk_championship');
+    }
+
     public function readChampionships(): array
     {
         return self::with('quarters')->get()->toArray();
@@ -27,6 +57,25 @@ class Championship extends Model
     {
         return self::where('id', $id)
             ->with('quarters')
+            ->with('quarters.team1')
+            ->with('quarters.team2')
+            ->with('semiFinals')
+            ->with('semiFinals.team1')
+            ->with('semiFinals.team2')
+            ->with('finals')
+            ->with('finals.team1')
+            ->with('finals.team2')
+            ->with('subscribed')
+            ->with('subscribed.team')
+            ->with('secondPlace')
+            ->with('secondPlace.team')
+            ->with('secondPlace.team.points')
+            ->with('thirdPlace')
+            ->with('thirdPlace.team')
+            ->with('thirdPlace.team.points')
+            ->with('champion')
+            ->with('champion.team')
+            ->with('champion.team.points')
             ->get()
             ->toArray();
     }

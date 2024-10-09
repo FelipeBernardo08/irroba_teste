@@ -17,6 +17,16 @@ class QuarterFinals extends Model
         'fk_championship'
     ];
 
+    public function team1()
+    {
+        return $this->belongsTo(Teams::class, 'fk_team_1');
+    }
+
+    public function team2()
+    {
+        return $this->belongsTo(Teams::class, 'fk_team_2');
+    }
+
     public function createPlayQuarter(array $teams): array
     {
         shuffle($teams);
@@ -38,12 +48,11 @@ class QuarterFinals extends Model
                     ->toArray();
             }
         }
-        return $keyGames;
     }
 
-    public function readQuarterByIdChampionship(int $id_championship): array
+    public function readQuarterByIdChampionship(int $idChampionship): array
     {
-        return self::where('fk_championship', $id_championship)
+        return self::where('fk_championship', $idChampionship)
             ->get()
             ->toArray();
     }

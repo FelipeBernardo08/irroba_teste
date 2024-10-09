@@ -13,6 +13,11 @@ class Teams extends Model
         'name'
     ];
 
+    public function points()
+    {
+        return $this->hasMany(Points::class, 'fk_team');
+    }
+
     public function readTeams(): array
     {
         return self::get()->toArray();

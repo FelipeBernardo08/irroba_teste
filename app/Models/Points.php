@@ -15,6 +15,11 @@ class Points extends Model
         'points'
     ];
 
+    public function team()
+    {
+        return $this->belongsTo(Teams::class, 'fk_team');
+    }
+
     public function createPoints(array $points): array
     {
         return self::create([
@@ -23,28 +28,36 @@ class Points extends Model
         ])->toArray();
     }
 
-    public function incrementPoint(int $id_team, int $id_championship, int $point): bool
+    public function incrementPoint(int $id_team, int $idChampionship, int $point): bool
     {
         return self::where('fk_team', $id_team)
-            ->where('fk_championship', $id_championship)
+            ->where('fk_championship', $idChampionship)
             ->increment('points', $point);
     }
 
-    public function decrementPoint(int $id_team, int $id_championship, int $point): bool
+    public function decrementPoint(int $id_team, int $idChampionship, int $point): bool
     {
         $points = self::where('fk_team', $id_team)
-            ->where('fk_championship', $id_championship)
+            ->where('fk_championship', $idChampionship)
             ->get()
             ->toArray();
         if ($points[0]['points'] > 0 && ($points[0]['points'] -= $point) >= 0) {
             return self::where('fk_team', $id_team)
-                ->where('fk_championship', $id_championship)
+                ->where('fk_championship', $idChampionship)
                 ->decrement('points', $point);
         }
         return self::where('fk_team', $id_team)
-            ->where('fk_championship', $id_championship)
+            ->where('fk_championship', $idChampionship)
             ->update([
                 'points' => 0
             ]);
+    }
+
+    public function getPointsByArrayIdTeam(array $ids, int $idChampionship): array
+    {
+        return self::where('fk_championship', $idChampionship)
+            ->whereIn('fk_team', $ids)
+            ->get()
+            ->toArray();
     }
 }

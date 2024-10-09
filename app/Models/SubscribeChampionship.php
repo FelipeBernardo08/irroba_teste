@@ -14,6 +14,11 @@ class SubscribeChampionship extends Model
         'fk_championship'
     ];
 
+    public function team()
+    {
+        return $this->belongsTo(Teams::class, 'fk_team');
+    }
+
     public function createSubscribe(object $request): array
     {
         return self::create([
@@ -22,9 +27,17 @@ class SubscribeChampionship extends Model
         ])->toArray();
     }
 
-    public function readTeamsSubscribedByChampionshipId(int $id_championship): array
+    public function readTeamsSubscribedByChampionshipId(int $idChampionship): array
     {
-        return self::where('fk_championship', $id_championship)
+        return self::where('fk_championship', $idChampionship)
+            ->get()
+            ->toArray();
+    }
+
+    public function getSubscribeByArrayTeams(array $ids, int $idChampionship): array
+    {
+        return self::where('fk_championship', $idChampionship)
+            ->whereIn('fk_team', $ids)
             ->get()
             ->toArray();
     }

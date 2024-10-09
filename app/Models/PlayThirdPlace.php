@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Finals extends Model
+class PlayThirdPlace extends Model
 {
     use HasFactory;
 
@@ -27,18 +27,16 @@ class Finals extends Model
         return $this->belongsTo(Teams::class, 'fk_team_2');
     }
 
-
-    public function createFinals(array $winnersSemiFinals, int $idChampionship): array
+    public function createPlayThirdPlace(array $play, int $idChampionship): array
     {
-        $final = self::create([
-            'fk_team_1' => $winnersSemiFinals[0],
-            'fk_team_2' => $winnersSemiFinals[1],
+        $play = self::create([
+            'fk_team_1' => $play[0],
+            'fk_team_2' => $play[1],
             'goals_team_1' => $this->generateGoal(),
             'goals_team_2' => $this->generateGoal(),
             'fk_championship' => $idChampionship
         ])->toArray();
-
-        return self::where('id', $final['id'])
+        return self::where('id', $play['id'])
             ->get()
             ->toArray();
     }
