@@ -28,7 +28,7 @@ class SubscribeChampionshipController extends Controller
                 if (count($responseSubscribe) != 0) {
                     $this->points->createPoints($team, $request->fk_championship);
                 } else {
-                    return $this->error('Quantidade máxima de inscritos no campeonato atingido');
+                    return $this->error('Erro ao inscrever times');
                 }
                 if (($key + 1) == count($request['teams'])) {
                     return response()->json(['msg' => 'Times inscritos com sucesso'], 200);
@@ -37,11 +37,6 @@ class SubscribeChampionshipController extends Controller
         } catch (Exception $e) {
             return $this->error($e);
         }
-    }
-
-    public function responseOK(array $response): object
-    {
-        return response()->json($response, 200);
     }
 
     public function error(string $message): object

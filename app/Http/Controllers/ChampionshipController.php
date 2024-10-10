@@ -56,7 +56,6 @@ class ChampionshipController extends Controller
         $this->thirdPlace = $third;
     }
 
-
     public function createChampionship(Request $request): object
     {
         try {
@@ -277,7 +276,7 @@ class ChampionshipController extends Controller
         return 0;
     }
 
-    public function setWinner(int $idWinner, int $idChampionship)
+    public function setWinner(int $idWinner, int $idChampionship): void
     {
         $this->champion->createChampion($idWinner, $idChampionship);
     }

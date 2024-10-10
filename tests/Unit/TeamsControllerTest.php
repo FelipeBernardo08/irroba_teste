@@ -4,8 +4,6 @@ use Illuminate\Http\Request;
 use Tests\TestCase;
 use App\Http\Controllers\TeamsController;
 use App\Models\Teams;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery\MockInterface;
 
 class TeamsControllerTest extends TestCase
 {
