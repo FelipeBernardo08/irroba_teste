@@ -21,6 +21,12 @@ class SubscribeChampionship extends Model
 
     public function createSubscribe(int $idTeam, int $idChampionship): array
     {
+        $subscribes = self::where('fk_championship', $idChampionship)
+            ->get()
+            ->toArray();
+        if (count($subscribes) == 8) {
+            return [];
+        }
         return self::create([
             'fk_team' => $idTeam,
             'fk_championship' => $idChampionship

@@ -30,7 +30,7 @@ class Teams extends Model
             ->toArray();
     }
 
-    public function createTeams(array $teams): array
+    public function createTeams(array $teams): bool
     {
         foreach ($teams as $key => $team) {
             self::create([
@@ -38,9 +38,9 @@ class Teams extends Model
             ])->toArray();
 
             if (($key + 1) == count($teams)) {
-                return self::get()
-                    ->toArray();
+                return true;
             }
         }
+        return false;
     }
 }

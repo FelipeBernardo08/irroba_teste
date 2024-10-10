@@ -55,7 +55,10 @@ class Championship extends Model
 
     public function readChampionships(): array
     {
-        return self::with('quarters')->get()->toArray();
+        return self::with('subscribed')
+            ->with('subscribed.team')
+            ->get()
+            ->toArray();
     }
 
     public function points()

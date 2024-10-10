@@ -27,6 +27,8 @@ class SubscribeChampionshipController extends Controller
                 $responseSubscribe = $this->subscribe->createSubscribe($team, $request->fk_championship);
                 if (count($responseSubscribe) != 0) {
                     $this->points->createPoints($team, $request->fk_championship);
+                } else {
+                    return $this->error('Quantidade máxima de inscritos no campeonato atingido');
                 }
                 if (($key + 1) == count($request['teams'])) {
                     return response()->json(['msg' => 'Times inscritos com sucesso'], 200);

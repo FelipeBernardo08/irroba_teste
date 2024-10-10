@@ -20,8 +20,8 @@ class TeamsController extends Controller
     {
         try {
             $responseTeams = $this->teams->createTeams($request['teams']);
-            if (count($responseTeams) != 0) {
-                return $this->responseOK($responseTeams);
+            if ($responseTeams) {
+                return response()->json(['msg' => 'Times registrados com sucesso!'], 200);
             }
             return $this->error('Times não puderam ser cadastrados, tente novamente mais tarde!');
         } catch (Exception $e) {
