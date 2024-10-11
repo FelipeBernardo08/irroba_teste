@@ -122,7 +122,6 @@ class ChampionshipController extends Controller
                             if (count($responseFinals) != 0) {
                                 $this->insertPointsPlay($responseFinals);
                                 $this->removePointsPlay($responseFinals);
-
                                 $idWinner = $this->getWinners($responseFinals);
                                 $this->setSecondPlace($idWinner[0], $id, $responseFinals);
                                 $this->setWinner($idWinner[0], $id);

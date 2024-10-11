@@ -132,98 +132,6 @@ class ChampionshipControllerTest extends TestCase
         $mockController->setThirdPlace($idWinnerMock, $idChampionshipMock);
     }
 
-    public function test_setSecondPlaceExpectUseTeam2(): void
-    {
-        $mockModelChampionship = Mockery::mock(Championship::class);
-        $mockModelTeams = Mockery::mock(Teams::class);
-        $mockModelSubscribe = Mockery::mock(SubscribeChampionship::class);
-        $mockModelQuarters = Mockery::mock(QuarterFinals::class);
-        $mockModelPoints = Mockery::mock(Points::class);
-        $mockModelFinals = Mockery::mock(Finals::class);
-        $mockModelSemiFinals = Mockery::mock(SemiFinals::class);
-        $mockModelSecondPlace = Mockery::mock(SecondPlace::class);
-        $mockModelThirdPlace = Mockery::mock(ThirdPlace::class);
-        $mockModelChampion = Mockery::mock(Champion::class);
-        $mockModelPlayThird = Mockery::mock(PlayThirdPlace::class);
-
-        $mockController = new ChampionshipController(
-            $mockModelChampionship,
-            $mockModelTeams,
-            $mockModelSubscribe,
-            $mockModelQuarters,
-            $mockModelPoints,
-            $mockModelFinals,
-            $mockModelSemiFinals,
-            $mockModelSecondPlace,
-            $mockModelChampion,
-            $mockModelPlayThird,
-            $mockModelThirdPlace
-        );
-
-        $finalMock = [
-            [
-                "fk_team_2" => 1,
-                "fk_team_1" => 3,
-            ]
-        ];
-
-        $idChampionshipMock = 1;
-
-        $idWinnerMock = 3;
-
-        $mockModelSecondPlace->shouldReceive('createTeamSecondPlace')
-            ->with($finalMock[0]['fk_team_2'], $idChampionshipMock)
-            ->once();
-
-        $mockController->setSecondPlace($idWinnerMock, $idChampionshipMock, $finalMock);
-    }
-
-    public function test_setSecondPlaceExpectUseTeam1(): void
-    {
-        $mockModelChampionship = Mockery::mock(Championship::class);
-        $mockModelTeams = Mockery::mock(Teams::class);
-        $mockModelSubscribe = Mockery::mock(SubscribeChampionship::class);
-        $mockModelQuarters = Mockery::mock(QuarterFinals::class);
-        $mockModelPoints = Mockery::mock(Points::class);
-        $mockModelFinals = Mockery::mock(Finals::class);
-        $mockModelSemiFinals = Mockery::mock(SemiFinals::class);
-        $mockModelSecondPlace = Mockery::mock(SecondPlace::class);
-        $mockModelThirdPlace = Mockery::mock(ThirdPlace::class);
-        $mockModelChampion = Mockery::mock(Champion::class);
-        $mockModelPlayThird = Mockery::mock(PlayThirdPlace::class);
-
-        $mockController = new ChampionshipController(
-            $mockModelChampionship,
-            $mockModelTeams,
-            $mockModelSubscribe,
-            $mockModelQuarters,
-            $mockModelPoints,
-            $mockModelFinals,
-            $mockModelSemiFinals,
-            $mockModelSecondPlace,
-            $mockModelChampion,
-            $mockModelPlayThird,
-            $mockModelThirdPlace
-        );
-
-        $finalMock = [
-            [
-                "fk_team_2" => 1,
-                "fk_team_1" => 3,
-            ]
-        ];
-
-        $idChampionshipMock = 1;
-
-        $idWinnerMock = 1;
-
-        $mockModelSecondPlace->shouldReceive('createTeamSecondPlace')
-            ->with($finalMock[0]['fk_team_1'], $idChampionshipMock)
-            ->once();
-
-        $mockController->setSecondPlace($idWinnerMock, $idChampionshipMock, $finalMock);
-    }
-
     public function test_setWinnerMethod(): void
     {
         $mockModelChampionship = Mockery::mock(Championship::class);
@@ -1639,24 +1547,82 @@ class ChampionshipControllerTest extends TestCase
             [
                 "goals_team_1" => 1,
                 "goals_team_2" => 0,
-                "fk_team_1" => 3,
-                "fk_team_2" => 4,
+                "fk_team_1" => 1,
+                "fk_team_2" => 2,
                 "fk_championship" => 2
             ],
             [
                 "goals_team_1" => 1,
                 "goals_team_2" => 0,
-                "fk_team_1" => 5,
-                "fk_team_2" => 6,
+                "fk_team_1" => 1,
+                "fk_team_2" => 2,
                 "fk_championship" => 2
             ],
             [
                 "goals_team_1" => 1,
                 "goals_team_2" => 0,
-                "fk_team_1" => 7,
-                "fk_team_2" => 8,
+                "fk_team_1" => 1,
+                "fk_team_2" => 2,
+                "fk_championship" => 2
+            ],
+        ];
+
+        $winnersQuarters = (array)[
+            1,
+            1,
+            1,
+            1
+        ];
+
+        $winnersSemiFinals = [
+            1,
+            1
+        ];
+
+        $mockReturnCreateSemiFinals = (array)[
+            [
+                "goals_team_1" => 1,
+                "goals_team_2" => 0,
+                "fk_team_1" => 1,
+                "fk_team_2" => 2,
+                "fk_championship" => 2
+            ],
+            [
+                "goals_team_1" => 1,
+                "goals_team_2" => 0,
+                "fk_team_1" => 1,
+                "fk_team_2" => 2,
+                "fk_championship" => 2
+            ],
+        ];
+
+        $responseThirdPlacePlay = (array) [
+            [
+                "goals_team_1" => 1,
+                "goals_team_2" => 0,
+                "fk_team_1" => 1,
+                "fk_team_2" => 2,
+                "fk_championship" => 2
+            ],
+        ];
+
+        $mockReturnCreateFinals = (array) [
+            [
+                "goals_team_1" => 1,
+                "goals_team_2" => 0,
+                "fk_team_1" => 1,
+                "fk_team_2" => 2,
                 "fk_championship" => 2
             ]
+        ];
+
+        $mockLoserSemi = (array) [
+            2,
+            2
+        ];
+
+        $mockChampionshipReturn = (array) [
+            "test"
         ];
 
         $idChampionshipMock = 1;
@@ -1677,13 +1643,47 @@ class ChampionshipControllerTest extends TestCase
             ->andReturn($quarterFinalsResponseMock);
 
         $mockModelPoints->shouldReceive('incrementPoint')
-            ->times(1)
+            ->times(8)
             ->with($quarterFinalsResponseMock[0]['fk_team_1'], $quarterFinalsResponseMock[0]['fk_championship'], $quarterFinalsResponseMock[0]['goals_team_1']);
 
         $mockModelPoints->shouldReceive('decrementPoint')
-            ->times(1)
+            ->times(8)
             ->with($quarterFinalsResponseMock[0]['fk_team_2'], $quarterFinalsResponseMock[0]['fk_championship'], $quarterFinalsResponseMock[0]['goals_team_1']);
 
+        $mockModelSemiFinals->shouldReceive('createSemiFinals')
+            ->once()
+            ->with($winnersQuarters, $idChampionshipMock)
+            ->andReturn($mockReturnCreateSemiFinals);
+
+        $mockModelPlayThird->shouldReceive('createPlayThirdPlace')
+            ->once()
+            ->with($mockLoserSemi, $idChampionshipMock)
+            ->andReturn($responseThirdPlacePlay);
+
+        $mockModelThirdPlace->shouldReceive('createThirdPlace')
+            ->with(1, 1)
+            ->once();
+
+        $mockModelFinals->shouldReceive('createFinals')
+            ->once()
+            ->with($winnersSemiFinals, $idChampionshipMock)
+            ->andReturn($mockReturnCreateFinals);
+
+
+        $mockModelSecondPlace->shouldReceive('createTeamSecondPlace')
+            ->once()
+            ->with(2, 1);
+
+        $mockModelChampion->shouldReceive('createChampion')
+            ->once()
+            ->with(1, 1);
+
+        $mockModelChampionship->shouldReceive('readChampionshipId')
+            ->once()
+            ->with($idChampionshipMock)
+            ->andReturn($mockChampionshipReturn);
+
         $response = $mockController->initializeChampionship($idChampionshipMock);
+        $this->assertEquals(200, $response->status());
     }
 }
