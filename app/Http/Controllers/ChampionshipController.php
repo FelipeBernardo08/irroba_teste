@@ -256,7 +256,7 @@ class ChampionshipController extends Controller
     {
         $subscribeTeams = $this->subscribe->getSubscribeByArrayTeams([$play['fk_team_1'], $play['fk_team_2']], $play['fk_championship']);
         if (count($subscribeTeams) == 2) {
-            if ($subscribeTeams[0]['id'] > $subscribeTeams[1]['id']) {
+            if ($subscribeTeams[0]['id'] < $subscribeTeams[1]['id']) {
                 return $subscribeTeams[0]['fk_team'];
             }
             return $subscribeTeams[1]['fk_team'];
@@ -269,9 +269,9 @@ class ChampionshipController extends Controller
         $subscribeTeams = $this->subscribe->getSubscribeByArrayTeams([$play['fk_team_1'], $play['fk_team_2']], $play['fk_championship']);
         if (count($subscribeTeams) == 2) {
             if ($subscribeTeams[0]['id'] > $subscribeTeams[1]['id']) {
-                return $subscribeTeams[1]['fk_team'];
+                return $subscribeTeams[0]['fk_team'];
             }
-            return $subscribeTeams[0]['fk_team'];
+            return $subscribeTeams[1]['fk_team'];
         }
         return 0;
     }
